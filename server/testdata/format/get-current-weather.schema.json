@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "enum": ["get_current_weather"]
+    },
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string"
+        },
+        "format": {
+          "type": "string",
+          "enum": ["celsius", "fahrenheit"]
+        }
+      },
+      "required": ["location", "format"]
+    }
+  },
+  "required": ["name", "parameters"]
+}

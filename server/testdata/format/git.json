@@ -1,0 +1,67 @@
+[
+    {
+      "type": "function",
+      "function": {
+        "name": "git_status",
+        "description": "Shows the working tree status",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "repo_path": {
+              "type": "string",
+              "description": "Git repository path."
+            }
+          },
+          "required": ["repo_path"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "git_add",
+        "description": "Show changes between commits, commit and working tree, etc",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "repo_path": {
+              "type": "string",
+              "description": "Git repository path."
+            },
+            "files": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Files to add."
+            }
+          },
+          "required": ["repo_path", "files"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "git_log",
+        "description": "Show changes between commits, commit and working tree, etc",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "repo_path": {
+              "type": "string",
+              "description": "Git repository path."
+            },
+            "max_count": {
+              "type": "integer",
+              "description": "Limit the number of commits to output.",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          "required": ["repo_path"]
+        }
+      }
+    }
+  ]
+  

@@ -1,0 +1,70 @@
+{
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+            "type": "string",
+            "enum": ["git_status"]
+        },
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "repo_path": {
+              "type": "string"
+            }
+          },
+          "required": ["repo_path"]
+        }
+      },
+      "required": ["name", "parameters"]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": ["git_add"]
+        },
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "repo_path": {
+              "type": "string"
+            },
+            "files": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": ["repo_path", "files"]
+        }
+      },
+      "required": ["name", "parameters"]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": ["git_log"]
+        },
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "repo_path": {
+              "type": "string"
+            },
+            "max_count": {
+              "type": "integer"
+            }
+          },
+          "required": ["repo_path"]
+        }
+      },
+      "required": ["name", "parameters"]
+    }
+  ]
+}
