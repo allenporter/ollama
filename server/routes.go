@@ -1467,7 +1467,8 @@ func (s *Server) ChatHandler(c *gin.Context) {
 		return
 	}
 
-	slog.Debug("chat request", "images", len(images), "prompt", prompt)
+	format := chatFormat(req.Format, req.Tools)
+	slog.Debug("chat request", "images", len(images), "prompt", prompt, "format", format)
 
 	ch := make(chan any)
 	go func() {
@@ -1477,7 +1478,7 @@ func (s *Server) ChatHandler(c *gin.Context) {
 		if err := r.Completion(c.Request.Context(), llm.CompletionRequest{
 			Prompt:  prompt,
 			Images:  images,
-			Format:  req.Format,
+			Format:  format,
 			Options: opts,
 		}, func(r llm.CompletionResponse) {
 			res := api.ChatResponse{

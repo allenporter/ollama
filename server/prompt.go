@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log/slog"
@@ -149,4 +150,39 @@ func checkMllamaModelFamily(m *Model) bool {
 		}
 	}
 	return false
+}
+
+// chatFormat looks at the incoming request format and set of tools and determines the
+// format of the chat response. Tools are provided in an OpenAPI schema which can
+// be used to determine the format of the response to avoid the model producing
+// tool calls that are not the right format.
+func chatFormat(reqFormat json.RawMessage, tools []api.Tool) (format json.RawMessage) {
+	// Use the existing request format if provided
+	if len(reqFormat) > 0 {
+		return reqFormat
+	}
+	toolFormats := make([]interface{}, 0, len(tools))
+	for _, tool := range tools {
+		// Create an object type with a properties ield that has a name
+		// with a string and the enum is the name of the tool. The parameters
+		// are the parameters of the tool.
+		toolFormat := map[string]interface{}{
+			"type": "object",
+			"properties": map[string]interface{}{
+				"name": map[string]interface{}{
+					"type": "string",
+					"enum": []string{tool.Function.Name},
+				},
+				"parameters": tool.Function.Parameters,
+			},
+			"required": []string{"name", "parameters"},
+		}
+		toolFormats = append(toolFormats, toolFormat)
+	}
+	// Return the tool formats as an array of objects
+	resultFormat := map[string]interface{}{
+		"anyOf": toolFormats,
+	}
+	format, _ = json.Marshal(resultFormat)
+	return format
 }
